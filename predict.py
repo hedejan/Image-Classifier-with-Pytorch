@@ -14,19 +14,17 @@ import image_classifier as fn
 
 parser = argparse.ArgumentParser(description="Predict Image Class")
 
-parser.add_argument('--data_dir', nargs='*', action="store", default="./flowers/",
+parser.add_argument('-dir', '--data_dir', type= str, action="store", default="./flowers",
                     metavar='', help="Define the directory for data ")
-parser.add_argument('--image_path', default='flowers/test/1/image_06752.jpg', nargs='*',
-                    action="store", type=str, metavar='', help="Define the directory for the Image")
-parser.add_argument('--checkpoint', default='checkpoint.pth', nargs='*',
-                    action="store", type=str, metavar='', help="Define the directory to the PTH file")
-parser.add_argument('--top_k', default=5, dest="top_k", action="store", type=int,
-                    metavar='', help="To show the top_k Prediction")
-parser.add_argument('--category_names', dest="category_names", action="store", default='cat_to_name.json',
+parser.add_argument('-ch', '--checkpoint', type= str, default= 'checkpoint.pth',
+                    action="store", metavar='', help="Define the directory to the checkpoint.pth file")
+parser.add_argument('-tk', '--top_k', default=5, dest="top_k", action="store", type=int,
+                    metavar='', help="To show the top k predictions")
+parser.add_argument('-cat', '--category_names', type= str, dest="category_names", action="store", default='cat_to_name.json',
                     metavar='', help="Define The category name")
-parser.add_argument('--gpu', default="gpu", action="store", dest="gpu", metavar='', help="To use gpu power")
+parser.add_argument('-gpu','--processor', dest="processor", action="store", default="cpu", type=str, 
+                    metavar='', help="GPU training")
+
 args = parser.parse_args()
 
-
-_, _, _, cat_to_name, _ = fn.load_data(args.data_dir)
-fn.predict_class(cat_to_name, args.image_path, args.top_k, args.gpu)
+fn.predict_class(args.checkpoint, args.processor, args.category_names, args.data_dir, args.top_k)
